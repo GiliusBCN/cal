@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Calculadora</title>
+  <meta charset="utf-8">
+  <style type="text/css">
+    .operaciones {
+      border-radius: 10px; 
+      border: 2px solid #000000;
+      box-shadow: 6px 6px 9px 0px rgba(0, 0, 0, 1);
+      height: 30px;
+      width: 260px;
+      padding-left: 20px;      
+      padding-top: 4px;
+
+    }
+    .title {
+      text-decoration: underline;
+      text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
+    }
+  </style>
+  <script type="text/javascript">
+    let cifra;
+    let operacion;
+    let ErrMsg;
+    
+    const vaciar = () => {
+      document.getElementById("pantalla").value = "";
+    }
+
+    //Función calculo cuadrado
+    const cuadrado = () => {     
+      //Comprobamos valores informados, si no son correctos salimos de la función 
+      validarEntrada(0, ErrMsg);      
+      if (ErrMsg.length != 0) return;      
+
+      let num = document.getElementById("pantalla"); //Inicializamos variable num
+      num.value = num.value * num.value; //Calculamos cuadrado
+
+      rellenar_info(num.value); //Renderizamos valor y mensaje
+    }
+
+    //Función calculo módulo
+    const mod = () => {
+      //Comprobamos valores informados, si no son correctos salimos de la función
+      validarEntrada(0, ErrMsg);      
+      if (ErrMsg.length != 0) return;      
+
+      let num = document.getElementById("pantalla"); //Inicializamos variable
+
+      //Cálculo módulo
+      if ( !(num.value >= 0) ){
+        num.value = num.value * -1;
+      }
+
+      rellenar_info(num.value); //Renderizamos mensaje
+    }
+    
+    //Función calculo factorial
+    const fact = () => {        
+      //Comprobamos valores informados, si no son correctos salimos de la función
+      validarEntrada(0, ErrMsg);      
+      if (ErrMsg.length != 0) return;      
+      
+      //Inicializo variables
+      let num = document.getElementById("pantalla");
+      let factorial = num.value; 
+      
+      //Calculo factorial (si es negativo no hace nada)
+      for (let index = num.value; index > 1; index--) {          
+        factorial = factorial * (index - 1);
+      }     
+      
+      num.value = factorial;
+
+      rellenar_info(factorial); //Renderizamos mensaje
+    }
+
+
+    const validarEntrada = (ope) => {
+      ErrMsg = "";
+      switch (ope) {
+        case 0:        
+          if ( isNaN(document.getElementById("pantalla").value) ) {
+            ErrMsg = 'Esta operación sólo acepta valores numéricos, revise los valores informados';
+            //alert(ErrMsg);
+            document.getElementById("pantalla").value = "Error";
+          }
+          break;
+
+          case 1:
+            listaNumeros = document.getElementById("pantalla").value.split(",").map(Number);            
+
+            for (let index = 0; index < listaNumeros.length; index++) {
+              if ( isNaN(listaNumeros[index]) ) {
+                ErrMsg = "La lista contiene valores no numéricos" 
+                document.getElementById("pantalla").value = "Error";
+                break;             
+              }
+            }
+            break;
+
+        default:
+          break;
+      }
+    }
+
+    const rellenar_info = (valorCalculado) => {
+      let infoNumero = document.getElementById("info");
+      let infoText;
+
+      if (valorCalculado < 100) {      
+        infoText = "Info: El resultado es menor que 100";        
+      }
+      else if ( (valorCalculado >= 100) && (valorCalculado <= 200) ) {
+        infoText = "Info: El resultado está entre 100 y 200";
+      }
+      else {
+        infoText = "Info: El resultado es superior a 200";
+      }     
+      
+      infoNumero.innerHTML = infoText;
+    }
+  </script>
+</head>
+<body>
+  <h1>Calculadora de CORE</h1>
+  Número:
+  <input type="text" id="pantalla" onclick="vaciar()">
+
+  <h2 id="info" class="grande" title="Info sobre el número">Info sobre el número</h2>
+
+  <h3 class="title">Operaciones unitarias</h3>  
+  <div class="operaciones">
+  <button id="cuadrado"  onclick="cuadrado()">x<sup>2</sup></button>
+  <button id="modulo"    onclick="mod()">Mod</button>
+  <button id="factorial" onclick="fact()">n!</button>
+  </div>
+  <br/>
+
+
+ </body>
+</html>
